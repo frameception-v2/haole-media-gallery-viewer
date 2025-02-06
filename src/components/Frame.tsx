@@ -22,17 +22,51 @@ import { createStore } from "mipd";
 import { Label } from "~/components/ui/label";
 import { PROJECT_TITLE } from "~/lib/constants";
 
-function ExampleCard() {
+function MediaGallery() {
+  const [currentMediaIndex, setCurrentMediaIndex] = useState(0);
+  const media = MEDIA_GALLERY[currentMediaIndex];
+
+  const handlePrevious = () => {
+    setCurrentMediaIndex(prev => (prev > 0 ? prev - 1 : MEDIA_GALLERY.length - 1));
+  };
+
+  const handleNext = () => {
+    setCurrentMediaIndex(prev => (prev < MEDIA_GALLERY.length - 1 ? prev + 1 : 0));
+  };
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Welcome to the Frame Template</CardTitle>
+        <CardTitle>Media Gallery</CardTitle>
         <CardDescription>
-          This is an example card that you can customize or remove
+          Showing {currentMediaIndex + 1} of {MEDIA_GALLERY.length}
         </CardDescription>
       </CardHeader>
-      <CardContent>
-        <Label>Place content in a Card here.</Label>
+      <CardContent className="flex flex-col gap-4">
+        <div className="relative aspect-square w-full overflow-hidden rounded-lg">
+          {media.type === 'image' ? (
+            <img
+              src={media.url}
+              alt="Gallery media"
+              className="h-full w-full object-cover"
+            />
+          ) : (
+            <video
+              controls
+              className="h-full w-full object-cover"
+              src={media.url}
+            />
+          )}
+        </div>
+        
+        <div className="flex gap-2 justify-between">
+          <PurpleButton onClick={handlePrevious} className="flex-1">
+            ← Previous
+          </PurpleButton>
+          <PurpleButton onClick={handleNext} className="flex-1">
+            Next →
+          </PurpleButton>
+        </div>
       </CardContent>
     </Card>
   );
@@ -140,7 +174,7 @@ export default function Frame() {
         <h1 className="text-2xl font-bold text-center mb-4 text-gray-700 dark:text-gray-300">
           {PROJECT_TITLE}
         </h1>
-        <ExampleCard />
+        <MediaGallery />
       </div>
     </div>
   );
