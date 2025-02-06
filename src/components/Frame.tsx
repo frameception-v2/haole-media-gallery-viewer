@@ -13,6 +13,8 @@ import {
   CardDescription,
   CardContent,
 } from "~/components/ui/card";
+import Image from "next/image";
+import { PurpleButton } from "~/components/ui/PurpleButton";
 
 import { config } from "~/components/providers/WagmiProvider";
 import { truncateAddress } from "~/lib/truncateAddress";
@@ -20,7 +22,7 @@ import { base, optimism } from "wagmi/chains";
 import { useSession } from "next-auth/react";
 import { createStore } from "mipd";
 import { Label } from "~/components/ui/label";
-import { PROJECT_TITLE } from "~/lib/constants";
+import { PROJECT_TITLE, MEDIA_GALLERY } from "~/lib/constants";
 
 function MediaGallery() {
   const [currentMediaIndex, setCurrentMediaIndex] = useState(0);
@@ -45,10 +47,13 @@ function MediaGallery() {
       <CardContent className="flex flex-col gap-4">
         <div className="relative aspect-square w-full overflow-hidden rounded-lg">
           {media.type === 'image' ? (
-            <img
+            <Image
               src={media.url}
               alt="Gallery media"
               className="h-full w-full object-cover"
+              width={800}
+              height={600}
+              priority={currentMediaIndex === 0}
             />
           ) : (
             <video
